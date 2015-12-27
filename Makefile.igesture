@@ -1,0 +1,72 @@
+CPU=i386 
+# This is the nt makefile
+
+##### These values are for the free Visual C++ Express 
+MSVS="\program files\microsoft visual studio 9.0"
+ATLINC=-I $(MSVS)\vc7\atlmfc\include
+ATLLIB=/libpath:$(MSVS)\vc7\atlmfc\lib
+VC7=$(MSVS)\vc
+VC7LINK=$(VC7)\bin\link.exe
+
+PLATSDK="\program files\microsoft platform sdk for windows server 2003 r2"
+PLATLIB=$(PLATSDK)\lib
+PLATINC=$(PLATSDK)\include
+
+# DXSDK=\local\dx8sdk
+# DXSDK=\local\dx9sdk
+
+DXSDK=\local\dx9sdk
+VC7LIB=$(VC7)\lib
+VC7INC=$(VC7)\include
+VCPATHS=/libpath:$(VC7LIB) /libpath:$(PLATLIB)
+VCINCS=/I $(VC7INC) /I $(PLATINC)
+
+DSHOW="\Program Files\Microsoft Platform SDK\DirectShow"
+DSHOWBASE=$(DSHOW)\samples\C++\DirectShow\BaseClasses
+
+# DSHOWINC=-I $(DSHOW)\include -I $(DSHOWBASE)\include
+
+# DSHOWLIB=/libpath:$(DXSDK)\lib\x86 /libpath:$(DSHOWBASE)\Debug
+# DSHOWLIB=/libpath:$(DSHOWBASE)\Debug
+
+DXSDKINC=-I $(DXSDK)\include -I $(DSHOWBASE)
+DXSDKLIB=/libpath:$(DXSDK)\lib\x86
+
+FINGER=\local\fingerworks
+FWLIB="/libpath:$(FINGER)\sdk\FWHID_HandTracking\lib"
+FWTRACK=fwtrack.lib
+GESTFLAGS=-I "$(FINGER)\sdk\FWHID_HandTracking\include" /DGESTURE=1
+
+OTHERLINKFLAGS=/IGNOREIDL
+
+OTHERFLAGS=$(PERTFLAGS)
+
+# Use these values for NOT debugging
+OTHER =
+LIBC = libc.lib
+LIBC = libcmt.lib
+DEBUGCC = /Ox /nologo $(OTHER)
+DEBUGLINK = /STACK:4194304 /nologo
+
+
+# Reverse the order of these statements to enable winsock support
+# (also need to define WINSOCK in mdep2.c)
+WINSOCK = wsock32.lib
+
+libs = $(LIBC) kernel32.lib user32.lib gdi32.lib winmm.lib comdlg32.lib $(WINSOCK) ole32.lib dxguid.lib dinput.lib d3dx9.lib d3d9.lib $(FWTRACK) $(PERTLIB) setupapi.lib quartz.lib msacm32.lib olepro32.lib oleaut32.lib advapi32.lib strmiids.lib
+
+# libs = $(LIBC) $(FWTRACK)
+
+igesture_tuio.exe : igesturelib.obj tuio.obj
+	$(VC7LINK) /NODEFAULTLIB $(DEBUGLINK) $(guiflags) $(OTHERLINKFLAGS) -out:igesture_tuio.exe /libpath:. $(VCPATHS) $(DSHOWLIB) $(DXSDKLIB) $(FWLIB) $(ATLLIB) igesturelib.obj tuio.obj $(libs)
+
+key.exe : $(ALLDECS) $(KEYOBJ) keydll.lib key.res
+
+.c.obj:
+	cl -c $(DEBUGCC) $(cflags) -I. $(VCINCS) $(DXSDKINC) $(DSHOWINC) $(GESTFLAGS) $(OTHERFLAGS) $(cvars) $*.c
+
+.cpp.obj:
+	cl -c -EHsc $(DEBUGCC) $(cflags) -I. $(VCINCS) $(DXSDKINC) $(ATLINC) $(DSHOWINC) $(GESTFLAGS) $(OTHERFLAGS) $(cvars) $*.cpp
+
+clean :
+	rm -f *.obj
