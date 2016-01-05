@@ -17,7 +17,9 @@ local.properties
 .loadpath
 *.tlog
 *.obj
-
+*.log
+Release/
+Debug/
 
 # External tool builders
 .externalToolBuilders/

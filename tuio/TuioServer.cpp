@@ -123,13 +123,13 @@ void TuioServer::sendFullMessages() {
 			}
 		}
 
-		double x = (*tuioCursor)->getX();
-		double y = (*tuioCursor)->getY();
+		float x = (*tuioCursor)->getX();
+		float y = (*tuioCursor)->getY();
 		if (flipX()) {
-			x = 1.0 - x;
+			x = 1.0f - x;
 		}
 		if (flipY()) {
-			y = 1.0 - y;
+			y = 1.0f - y;
 		}
 
 		// add the actual cursor set message
@@ -422,8 +422,8 @@ void TuioServer::startCursorBundle() {
 void TuioServer::addCursorMessage(TuioCursor *tcur) {
 
 	(*oscPacket) << osc::BeginMessage( "/tuio/25Dcur") << "set";
-	double x = tcur->getX();
-	double y = tcur->getY();
+	float x = tcur->getX();
+	float y = tcur->getY();
 	if (flipX()) {
 		x = 1.0 - x;
 	}
