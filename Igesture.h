@@ -35,7 +35,7 @@ using namespace TUIO;
 class Igesture { 
 	
 public:
-	Igesture(const char *host, int port, int v, int a);
+	Igesture(const char *host, int port, int v, int a, int i, int m, bool flipx, bool flipy);
 	~Igesture() {
 		delete tuioServer;
 	};
@@ -54,6 +54,9 @@ public:
 	void tc_pressed(float x, float y, int uid, int id, float force);
 	void tc_released(float x, float y, int uid, int id, float force);
 	void tc_dragged(float x, float y, int uid, int id, float force);
+
+	int initial_session_id;
+	int device_multiplier;
 
 private:
 	int verbose, running;

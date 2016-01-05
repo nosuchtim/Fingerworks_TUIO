@@ -123,14 +123,23 @@ void TuioServer::sendFullMessages() {
 			}
 		}
 
+		double x = (*tuioCursor)->getX();
+		double y = (*tuioCursor)->getY();
+		if (flipX()) {
+			x = 1.0 - x;
+		}
+		if (flipY()) {
+			y = 1.0 - y;
+		}
+
 		// add the actual cursor set message
 		(*fullPacket) << osc::BeginMessage( "/tuio/25Dcur") << "set";
-		(*fullPacket) << (int32)((*tuioCursor)->getSessionOrCursorID()) << (*tuioCursor)->getX() << (*tuioCursor)->getY() << (*tuioCursor)->getForce();
+		(*fullPacket) << (int32)((*tuioCursor)->getSessionOrCursorID()) << x << y << (*tuioCursor)->getForce();
 		(*fullPacket) << (*tuioCursor)->getXSpeed() << (*tuioCursor)->getYSpeed() << (*tuioCursor)->getForceSpeed() <<(*tuioCursor)->getMotionAccel();	
 		(*fullPacket) << osc::EndMessage;	
 		if ( verbose ) {
 			std::cout << "/tuio/25Dcur set"
-				<< " " << (int32)((*tuioCursor)->getSessionOrCursorID()) << " " << (*tuioCursor)->getX() << " " << (*tuioCursor)->getY() << " " << (*tuioCursor)->getForce()
+				<< " " << (int32)((*tuioCursor)->getSessionOrCursorID()) << " " << x << " " << y << " " << (*tuioCursor)->getForce()
 				<< " " << (*tuioCursor)->getXSpeed() << " " << (*tuioCursor)->getYSpeed() << " " << (*tuioCursor)->getForceSpeed() << " " <<(*tuioCursor)->getMotionAccel()
 				<< std::endl;
 		}
@@ -183,6 +192,8 @@ void TuioServer::initialize(const char *host, int port, int size) {
 
 	periodic_update = false;
 	connected = true;
+	flipx = false;
+	flipy = false;
 }
 
 TuioServer::~TuioServer() {
@@ -410,13 +421,21 @@ void TuioServer::startCursorBundle() {
 
 void TuioServer::addCursorMessage(TuioCursor *tcur) {
 
-	 (*oscPacket) << osc::BeginMessage( "/tuio/25Dcur") << "set";
-	 (*oscPacket) << (int32)(tcur->getSessionOrCursorID()) << tcur->getX() << tcur->getY() << tcur->getForce();
+	(*oscPacket) << osc::BeginMessage( "/tuio/25Dcur") << "set";
+	double x = tcur->getX();
+	double y = tcur->getY();
+	if (flipX()) {
+		x = 1.0 - x;
+	}
+	if (flipY()) {
+		y = 1.0 - y;
+	}
+	 (*oscPacket) << (int32)(tcur->getSessionOrCursorID()) << x << y << tcur->getForce();
 	 (*oscPacket) << tcur->getXSpeed() << tcur->getYSpeed() << tcur->getForceSpeed() << tcur->getMotionAccel() ;	
 	 (*oscPacket) << osc::EndMessage;
 	if ( verbose ) {
 		std::cout << "/tuio/25Dcur set"
-			<< " " << (int32)(tcur->getSessionOrCursorID()) << " " << tcur->getX() << " " << tcur->getY() << " " << tcur->getForce()
+			<< " " << (int32)(tcur->getSessionOrCursorID()) << " " << x << " " << y << " " << tcur->getForce()
 			<< " " << tcur->getXSpeed() << " " << tcur->getYSpeed() << " " << tcur->getForceSpeed() << " " << tcur->getMotionAccel()
 			<< std::endl;
 	}

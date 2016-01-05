@@ -96,26 +96,29 @@ void Igesture::tc_released(float x, float y, int uid, int id, float force) {
 	}
 }
 
-Igesture::Igesture(const char* host, int port, int v, int alive_update_interval = 10) {
+Igesture::Igesture(const char* host, int port, int v, int a, int i, int m, bool flipx, bool flipy) {
 
 	verbose = v;
 	s_id = 0;
 	wasupdated = 0;
+	initial_session_id = i;
+	device_multiplier = m;
 
 	// std::cout << "IGESTURE init verbose=" << verbose << std::endl;
 	memset(uid_for_id,0,sizeof(uid_for_id));
 
 	cursor = NULL;
 	tuioServer = new TuioServer(host, port, verbose);
-	tuioServer->setAliveUpdateInterval(alive_update_interval);
+	tuioServer->flipX(flipx);
+	tuioServer->flipY(flipy);
+	tuioServer->setAliveUpdateInterval(a);
 	//tuioServer->enablePeriodicMessages();
 }
 
 void mycallback(int devnum, int fingnum, int event, float x, float y, float prox)
 {
 	y = 1.0 - y;
-#define DEVICE_NUM_MULTIPLIER 100
-	int id = devnum * DEVICE_NUM_MULTIPLIER + fingnum;
+	int id = app->initial_session_id + devnum * app->device_multiplier + fingnum;
 	// printf("MYCALLBACK!! fing=%d xy=%f,%f\n",fingnum,x,y);
 	switch(event) {
 		case FINGER_DRAG:  // UPDATE
@@ -200,11 +203,21 @@ int main(int argc, char* argv[])
 	int verbose = 0;
 	int c;
 	int alive_update_interval = 1000;   // milliseconds
+	int device_multiplier = 1000;   // milliseconds
+	int initial_session_id = 10000;   // milliseconds
+	bool flipx = false;
+	bool flipy = false;
 
-	while ((c = getopt(argc, argv, _T("vV:a:"))) != EOF) {
+	while ((c = getopt(argc, argv, _T("vxyV:a:i:m:"))) != EOF) {
 		switch (c) {
 			case _T('v'):
 				verbose = 1;
+				break;
+			case _T('x'):
+				flipx = true;
+				break;
+			case _T('y'):
+				flipy = true;
 				break;
 			case _T('V'):
 				verbose = atoi(optarg);
@@ -212,10 +225,18 @@ int main(int argc, char* argv[])
 			case _T('a'):
 				alive_update_interval = atoi(optarg);
 				break;
+			case _T('i'):
+				initial_session_id = atoi(optarg);
+				break;
+			case _T('m'):
+				device_multiplier = atoi(optarg);
+				break;
 			case _T('?'):
 				std::cout << "usage: igesture_tuio [-v] [-V #] [-a #] [host] [port]\n";
 				std::cout << "  -V #    Verbosity level\n";
 				std::cout << "  -a #    Number of milliseconds between alive messages\n";
+				std::cout << "  -i #    initial session id\n";
+				std::cout << "  -m #    device session id multiplier\n";
         		return 0;
 		}
 	}
@@ -234,7 +255,7 @@ int main(int argc, char* argv[])
 		return 0;
 	}
 
-	app = new Igesture(host,port,verbose,alive_update_interval);
+	app = new Igesture(host,port,verbose,alive_update_interval,initial_session_id,device_multiplier,flipx,flipy);
 	app->tc_init();
 	app->run();
 	delete(app);

@@ -1,33 +1,8 @@
-﻿Build started 12/24/2015 2:43:00 PM.
-     1>Project "C:\local\IGESTURE_TUIO\igesture.vcxproj" on node 3 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\local\FingerWorks\sdk\FWHID_HandTracking\include /I.\TUIO /I.\sdl\include /I.\oscpack /Zi /nologo /W2 /WX- /O2 /Oy- /D WIN32 /D NDEBUG /D _CONSOLE /D ENDIANESS=OSC_HOST_LITTLE_ENDIAN /D _VC80_UPGRADE=0x0710 /D _MBCS /Gm- /EHsc /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\igesture\\" /Fd"Release\igesture\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt igesture.cpp TUIO\TuioServer.cpp TUIO\TuioTime.cpp
-         igesture.cpp
-         TuioServer.cpp
-         TuioTime.cpp
-         Generating Code...
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\local\FingerWorks\sdk\FWHID_HandTracking\include /I.\TUIO /I.\sdl\include /I.\oscpack /Zi /nologo /W2 /WX- /O2 /Oy- /D WIN32 /D NDEBUG /D _CONSOLE /D ENDIANESS=OSC_HOST_LITTLE_ENDIAN /D _VC80_UPGRADE=0x0710 /D _MBCS /Gm- /EHsc /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\igesture\\" /Fd"Release\igesture\vc120.pdb" /Gd /TC /analyze- /errorReport:prompt igesturelib.c
-         igesturelib.c
-     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(1193,5): warning MSB8012: TargetPath(C:\local\IGESTURE_TUIO\Release\igesture.exe) does not match the Linker's OutputFile property value (C:\local\IGESTURE_TUIO\igesture.exe). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"igesture.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:C:\local\FingerWorks\sdk\FWHID_HandTracking\lib /LIBPATH:.\sdl\lib glut32.lib opengl32.lib glu32.lib sdl.lib sdlmain.lib ws2_32.lib winmm.lib msvcrt.lib libcpmt.lib fwtrack.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"Release\igesture.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /TLBID:1 /DYNAMICBASE:NO /IMPLIB:"Release\igesture.lib" /MACHINE:X86 /SAFESEH Release\igesture\igesture.obj
-         Release\igesture\igesturelib.obj
-         Release\igesture\NetworkingUtils.obj
-         Release\igesture\UdpSocket.obj
-         Release\igesture\OscOutboundPacketStream.obj
-         Release\igesture\OscTypes.obj
-         Release\igesture\TuioServer.obj
-         Release\igesture\TuioTime.obj
-         Release\igesture\XGetopt.obj
-     1>fwtrack.lib(FWHID_Contact.obj) : warning LNK4099: PDB 'vc70.pdb' was not found with 'fwtrack.lib(FWHID_Contact.obj)' or at 'C:\local\IGESTURE_TUIO\Release\vc70.pdb'; linking object as if no debug info
-     1>fwtrack.lib(FWHID_HandMotion.obj) : warning LNK4099: PDB 'vc70.pdb' was not found with 'fwtrack.lib(FWHID_HandMotion.obj)' or at 'C:\local\IGESTURE_TUIO\Release\vc70.pdb'; linking object as if no debug info
-     1>fwtrack.lib(FWHID_MultiTouchDevice.obj) : warning LNK4099: PDB 'vc70.pdb' was not found with 'fwtrack.lib(FWHID_MultiTouchDevice.obj)' or at 'C:\local\IGESTURE_TUIO\Release\vc70.pdb'; linking object as if no debug info
-     1>fwtrack.lib(FWHID_Path.obj) : warning LNK4099: PDB 'vc70.pdb' was not found with 'fwtrack.lib(FWHID_Path.obj)' or at 'C:\local\IGESTURE_TUIO\Release\vc70.pdb'; linking object as if no debug info
-     1>fwtrack.lib(hid_Win32pnp.obj) : warning LNK4099: PDB 'vc70.pdb' was not found with 'fwtrack.lib(hid_Win32pnp.obj)' or at 'C:\local\IGESTURE_TUIO\Release\vc70.pdb'; linking object as if no debug info
-     1>fwtrack.lib(win32_ContactInternals.obj) : warning LNK4099: PDB 'vc70.pdb' was not found with 'fwtrack.lib(win32_ContactInternals.obj)' or at 'C:\local\IGESTURE_TUIO\Release\vc70.pdb'; linking object as if no debug info
-         igesture.vcxproj -> C:\local\IGESTURE_TUIO\Release\igesture.exe
-     1>Done Building Project "C:\local\IGESTURE_TUIO\igesture.vcxproj" (Build target(s)).
+﻿Build started 1/5/2016 1:59:57 PM.
+     1>Project "C:\Users\tjt\Documents\GitHub\Fingerworks_TUIO\igesture.vcxproj" on node 2 (Clean target(s)).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppClean.targets(76,5): warning : Access to the path 'c:\users\tjt\documents\github\fingerworks_tuio\release\igesture.exe' is denied.
+     1>Done Building Project "C:\Users\tjt\Documents\GitHub\Fingerworks_TUIO\igesture.vcxproj" (Clean target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:02.88
+Time Elapsed 00:00:00.02

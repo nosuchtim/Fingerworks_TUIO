@@ -131,11 +131,6 @@ namespace TUIO {
 		 */
 		void removeTuioCursor(TuioCursor *tcur);
 
-		/**
-		 * Updates an externally managed TuioCursor 
-		 *
-		 * @param	tcur	the TuioCursor to update
-		 */
 		void addExternalTuioCursor(TuioCursor *tcur);
 
 #if 0
@@ -251,6 +246,11 @@ namespace TUIO {
 		 * @return	true if this TuioServer is currently connected
 		 */
 		bool isConnected() { return connected; }
+
+		bool flipX() { return flipx; }
+		bool flipY() { return flipy; }
+		bool flipX(bool b) { flipx = b; return flipx; }
+		bool flipY(bool b) { flipy = b; return flipy;}
 		
 	private:
 		std::list<TuioCursor*> cursorList;
@@ -282,6 +282,8 @@ namespace TUIO {
 
 		long sessionID;
 		int verbose;
+		bool flipx;
+		bool flipy;
 
 #ifndef WIN32
 		pthread_t thread;

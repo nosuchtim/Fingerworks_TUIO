@@ -86,7 +86,6 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>glut32.lib;opengl32.lib;glu32.lib;sdl.lib;sdlmain.lib;ws2_32.lib;winmm.lib;msvcrt.lib;libcpmt.lib;fwtrack.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>igesture.exe</OutputFile>
       <AdditionalLibraryDirectories>C:\local\FingerWorks\sdk\FWHID_HandTracking\lib;.\sdl\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
