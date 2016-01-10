@@ -202,9 +202,9 @@ int main(int argc, char* argv[])
 	int port;
 	int verbose = 0;
 	int c;
-	int alive_update_interval = 1000;   // milliseconds
-	int device_multiplier = 1000;   // milliseconds
-	int initial_session_id = 10000;   // milliseconds
+	int alive_update_interval = 1000; // milliseconds
+	int initial_session_id = 11000;   // session id space
+	int device_multiplier =   1000;   // in session id's.  I.e. the second device starts at 12000
 	bool flipx = false;
 	bool flipy = false;
 
