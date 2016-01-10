@@ -61,11 +61,12 @@
       <PrecompiledHeader />
       <WarningLevel>Level2</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>C:\local\FingerWorks\sdk\FWHID_HandTracking\include;.\TUIO;.\oscpack;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>fwtrack.lib;glut32.lib;opengl32.lib;glu32.lib;sdl.lib;sdlmain.lib;ws2_32.lib;winmm.lib;msvcrtd.lib;libcpmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)igesture.exe</OutputFile>
-      <AdditionalLibraryDirectories>C:\local\FingerWorks\sdk/FWHID_HandTracking;.\sdl\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\local\FingerWorks\sdk\FWHID_HandTracking\lib;.\sdl\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)igesture.pdb</ProgramDatabaseFile>
