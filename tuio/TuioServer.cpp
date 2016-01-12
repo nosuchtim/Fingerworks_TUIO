@@ -128,7 +128,8 @@ void TuioServer::sendFullMessages() {
 		if (flipX()) {
 			x = 1.0f - x;
 		}
-		if (flipY()) {
+		// For some reason that I'm not sure of, the y is already flipped, so this is reversed.
+		if (!flipY()) {
 			y = 1.0f - y;
 		}
 
@@ -427,7 +428,8 @@ void TuioServer::addCursorMessage(TuioCursor *tcur) {
 	if (flipX()) {
 		x = 1.0 - x;
 	}
-	if (flipY()) {
+	// For some reason that I'm not sure of, the y is already flipped, so this is reversed.
+	if (!flipY()) {
 		y = 1.0 - y;
 	}
 	 (*oscPacket) << (int32)(tcur->getSessionOrCursorID()) << x << y << tcur->getForce();
