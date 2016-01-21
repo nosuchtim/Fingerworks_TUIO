@@ -117,8 +117,27 @@ Igesture::Igesture(const char* host, int port, int v, int a, int i, int m, bool 
 
 void mycallback(int devnum, int fingnum, int event, float x, float y, float prox)
 {
+	// We want the first device (whatever its devnum is) to start with the initial_session_id,
+	// so, we create a map of devnum to the initial_session_id for that devnum
+	static int devnum_initial_session_id[GESTURE_MAX_DEVICES];
+	static bool initialized = false;
+	static int next_initial_session_id;
+
+	if (!initialized) {
+		for (int i = 0; i < GESTURE_MAX_DEVICES; i++) {
+			devnum_initial_session_id[i] = -1;
+		}
+		next_initial_session_id = app->initial_session_id;
+		initialized = true;
+	}
+
+	if (devnum_initial_session_id[devnum] < 0) {
+		devnum_initial_session_id[devnum] = next_initial_session_id;
+		next_initial_session_id += app->device_multiplier;
+	}
+
 	y = 1.0 - y;
-	int id = app->initial_session_id + devnum * app->device_multiplier + fingnum;
+	int id = devnum_initial_session_id[devnum] + fingnum;
 	// printf("MYCALLBACK!! fing=%d xy=%f,%f\n",fingnum,x,y);
 	switch(event) {
 		case FINGER_DRAG:  // UPDATE
