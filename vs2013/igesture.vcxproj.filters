@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\oscpack">
+      <UniqueIdentifier>{041c4d3b-1735-427e-889c-65d2211e9bf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\TUIO">
+      <UniqueIdentifier>{84ec5f9c-f0e3-419d-8979-c28c2261e2f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\oscpack">
+      <UniqueIdentifier>{f24dbf08-8ac0-4625-9f44-fcc166cd1176}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TUIO">
+      <UniqueIdentifier>{927bca24-04bd-4fbd-8eba-691ee710519e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\misc">
+      <UniqueIdentifier>{9f5487a1-b7ec-481c-bc10-8584b64135bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\misc">
+      <UniqueIdentifier>{55a8fd71-e812-44da-aabf-404ba9cb86ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\igesture">
+      <UniqueIdentifier>{42cd013e-e537-45c1-b267-adefdb761f7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\igesture">
+      <UniqueIdentifier>{6b54fb5d-8a0a-44d1-977b-f97784c8309c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\oscpack\osc\OscOutboundPacketStream.cpp">
+      <Filter>Source Files\oscpack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\oscpack\osc\OscTypes.cpp">
+      <Filter>Source Files\oscpack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\oscpack\ip\win32\NetworkingUtils.cpp">
+      <Filter>Source Files\oscpack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\oscpack\ip\win32\UdpSocket.cpp">
+      <Filter>Source Files\oscpack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tuio\TuioServer.cpp">
+      <Filter>Source Files\TUIO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tuio\TuioTime.cpp">
+      <Filter>Source Files\TUIO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\igesture\Igesture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\igesture\igesturelib.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\misc\XGetopt.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TUIO\TuioObject.h">
+      <Filter>Header Files\TUIO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\oscpack\ip\NetworkingUtils.h">
+      <Filter>Header Files\oscpack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\oscpack\ip\TimerListener.h">
+      <Filter>Header Files\oscpack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\oscpack\ip\UdpSocket.h">
+      <Filter>Header Files\oscpack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\oscpack\osc\OscException.h">
+      <Filter>Header Files\oscpack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\oscpack\osc\OscHostEndianness.h">
+      <Filter>Header Files\oscpack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\oscpack\osc\OscOutboundPacketStream.h">
+      <Filter>Header Files\oscpack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\oscpack\osc\OscPacketListener.h">
+      <Filter>Header Files\oscpack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\oscpack\osc\OscTypes.h">
+      <Filter>Header Files\oscpack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tuio\TuioContainer.h">
+      <Filter>Header Files\TUIO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tuio\TuioCursor.h">
+      <Filter>Header Files\TUIO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tuio\TuioListener.h">
+      <Filter>Header Files\TUIO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tuio\TuioPoint.h">
+      <Filter>Header Files\TUIO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tuio\TuioServer.h">
+      <Filter>Header Files\TUIO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tuio\TuioTime.h">
+      <Filter>Header Files\TUIO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\misc\xgetopt.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\igesture\igesturelib.h">
+      <Filter>Header Files\igesture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\igesture\Igesture.h">
+      <Filter>Header Files\igesture</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
