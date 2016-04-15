@@ -48,7 +48,7 @@ extern FingerCallback fingercallback;
 extern int Nfingdevices;
 extern fingdevice_t Fingdevice[GESTURE_MAX_DEVICES];
 
-int gesture_init(HWND hwnd);
+bool gesture_init(HWND hwnd);
 int gesture_setcallback(FingerCallback f);
 int gesture_processframes();
 

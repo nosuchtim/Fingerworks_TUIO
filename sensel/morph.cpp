@@ -21,14 +21,13 @@
 
 #include "TuioServer.h"
 #include "TuioCursor.h"
-#include "Igesture.h"
-#include "igesturelib.h"
+#include "Morph.h"
 #include "xgetopt.h"
 #include "tchar.h"
 
 using namespace TUIO;
 
-void Igesture::tc_pressed(float x, float y, int uid, int id, float force) {
+void Morph::tc_pressed(float x, float y, int uid, int id, float force) {
 	// printf("clicked %f %f   uid=%d id=%d\n",x,y,uid,id);
 
 	uid = uid_for_id[id];
@@ -43,7 +42,7 @@ void Igesture::tc_pressed(float x, float y, int uid, int id, float force) {
 	wasupdated++;
 }
 
-void Igesture::tc_dragged(float x, float y, int uid, int id, float force) {
+void Morph::tc_dragged(float x, float y, int uid, int id, float force) {
 	// printf("dragged %f %f   uid=%d id=%d\n",x,y,uid,id);
 	TuioCursor *match = NULL;
 	uid = uid_for_id[id];
@@ -71,7 +70,7 @@ void Igesture::tc_dragged(float x, float y, int uid, int id, float force) {
 	}
 }
 
-void Igesture::tc_released(float x, float y, int uid, int id, float force) {
+void Morph::tc_released(float x, float y, int uid, int id, float force) {
 	// printf("released  uid=%d id=%d\n",uid,id);
 	uid_for_id[id] = 0;
 	std::list<TuioCursor*> cursorList = tuioServer->getTuioCursors();
@@ -93,24 +92,30 @@ void Igesture::tc_released(float x, float y, int uid, int id, float force) {
 	}
 }
 
-Igesture::Igesture(TuioServer* server, int i, int m) {
+Morph::Morph(const char* host, int port, int v, int a, int i, int m, bool flipx, bool flipy) {
 
+	verbose = v;
 	s_id = 0;
 	wasupdated = 0;
-
-	tuioServer = server;
 	initial_session_id = i;
 	device_multiplier = m;
-
 	_me = this;
 
+	// std::cout << "IGESTURE init verbose=" << verbose << std::endl;
 	memset(uid_for_id,0,sizeof(uid_for_id));
+
+	tuioServer = new TuioServer(host, port, verbose);
+	tuioServer->flipX(flipx);
+	tuioServer->flipY(flipy);
+	tuioServer->setAliveUpdateInterval(a);
+	//tuioServer->enablePeriodicMessages();
 }
 
-Igesture* Igesture::_me = 0;
+Morph* Morph::_me = 0;
 
-void Igesture::_mycallback(int devnum, int fingnum, int event, float x, float y, float prox)
+void Morph::_mycallback(int devnum, int fingnum, int event, float x, float y, float prox)
 {
+#ifdef WAIT_TILL_I_HAVE_A_MORPH
 	// We want the first device (whatever its devnum is) to start with the initial_session_id,
 	// so, we create a map of devnum to the initial_session_id for that devnum
 	static int devnum_initial_session_id[GESTURE_MAX_DEVICES];
@@ -145,11 +150,13 @@ void Igesture::_mycallback(int devnum, int fingnum, int event, float x, float y,
 			break;
 	}	
 	// printf("end MYCALLBACK\n");
+#endif
 }
 
 bool
-Igesture::tc_init()
+Morph::tc_init()
 {
+#ifdef WAIT_TILL_I_HAVE_A_MORPH
 	static TCHAR szAppName[] = TEXT("Simple Window");
 	HWND hwnd;
 	MSG msg;
@@ -170,7 +177,7 @@ Igesture::tc_init()
 
 	if (!RegisterClass(&wndclass)) {
 		MessageBox(NULL, TEXT("This program requires Windows NT!"), szAppName, MB_ICONERROR);
-		return 1;
+		return 0;
 	}
 
 	hwnd = CreateWindow(szAppName,
@@ -185,17 +192,19 @@ Igesture::tc_init()
 		hInstance,
 		NULL);
 
-	bool r = gesture_init(hwnd);
-	gesture_setcallback(Igesture::_mycallback);
+	int r = gesture_init(hwnd);
+	gesture_setcallback(Morph::_mycallback);
 	return r;
+#endif
+	return true;
 }
 
-void Igesture::run() {
+void Morph::run() {
 	running=true;
 	while (running) {
 		wasupdated = 0;
 		// printf("run loop top\n");
-		gesture_processframes();
+		// morph_processframes();   // EVENTUALLY
 		// if ( wasupdated > 0 ) {
 		if ( 1 ) {
 			// printf("run loop WASUPDATED\n");

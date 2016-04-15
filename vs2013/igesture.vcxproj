@@ -101,17 +101,27 @@
   <ItemGroup>
     <ClCompile Include="..\igesture\Igesture.cpp" />
     <ClCompile Include="..\igesture\igesturelib.c" />
+    <ClCompile Include="..\misc\main.cpp" />
+    <ClCompile Include="..\misc\mmtt_sharedmem.cpp" />
+    <ClCompile Include="..\misc\NosuchDebug.cpp" />
+    <ClCompile Include="..\misc\NosuchException.cpp" />
+    <ClCompile Include="..\misc\ptwinmm.c" />
     <ClCompile Include="..\misc\XGetopt.cpp" />
     <ClCompile Include="..\oscpack\ip\win32\NetworkingUtils.cpp" />
     <ClCompile Include="..\oscpack\ip\win32\UdpSocket.cpp" />
     <ClCompile Include="..\oscpack\osc\OscOutboundPacketStream.cpp" />
     <ClCompile Include="..\oscpack\osc\OscTypes.cpp" />
+    <ClCompile Include="..\sensel\morph.cpp" />
     <ClCompile Include="..\tuio\TuioServer.cpp" />
     <ClCompile Include="..\tuio\TuioTime.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\igesture\Igesture.h" />
     <ClInclude Include="..\igesture\igesturelib.h" />
+    <ClInclude Include="..\misc\mmtt_sharedmem.h" />
+    <ClInclude Include="..\misc\NosuchDebug.h" />
+    <ClInclude Include="..\misc\NosuchException.h" />
+    <ClInclude Include="..\misc\porttime.h" />
     <ClInclude Include="..\misc\xgetopt.h" />
     <ClInclude Include="..\oscpack\ip\NetworkingUtils.h" />
     <ClInclude Include="..\oscpack\ip\TimerListener.h" />
@@ -121,8 +131,10 @@
     <ClInclude Include="..\oscpack\osc\OscOutboundPacketStream.h" />
     <ClInclude Include="..\oscpack\osc\OscPacketListener.h" />
     <ClInclude Include="..\oscpack\osc\OscTypes.h" />
+    <ClInclude Include="..\sensel\morph.h" />
     <ClInclude Include="..\tuio\TuioContainer.h" />
     <ClInclude Include="..\tuio\TuioCursor.h" />
+    <ClInclude Include="..\tuio\TuioDevice.h" />
     <ClInclude Include="..\tuio\TuioListener.h" />
     <ClInclude Include="..\tuio\TuioPoint.h" />
     <ClInclude Include="..\tuio\TuioServer.h" />

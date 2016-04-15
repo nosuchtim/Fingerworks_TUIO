@@ -119,7 +119,7 @@ DeviceDisposalCallback(FWMultiTouchDevicePtr fwdevice, void *targetData)
 	Nfingdevices--;
 }
 
-int
+bool
 gesture_init(HWND hwnd)
 {
 	// try this

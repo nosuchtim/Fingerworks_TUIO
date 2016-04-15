@@ -33,6 +33,12 @@
     <Filter Include="Header Files\igesture">
       <UniqueIdentifier>{6b54fb5d-8a0a-44d1-977b-f97784c8309c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\sensel">
+      <UniqueIdentifier>{8c6971fb-a799-4bb2-a57f-f09a1e9d1f10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\sensel">
+      <UniqueIdentifier>{11e25572-7ecd-44ca-aee1-36bc73360b74}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\oscpack\osc\OscOutboundPacketStream.cpp">
@@ -53,14 +59,32 @@
     <ClCompile Include="..\tuio\TuioTime.cpp">
       <Filter>Source Files\TUIO</Filter>
     </ClCompile>
-    <ClCompile Include="..\igesture\Igesture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\igesture\igesturelib.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\misc\XGetopt.cpp">
       <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\igesture\Igesture.cpp">
+      <Filter>Source Files\igesture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\igesture\igesturelib.c">
+      <Filter>Source Files\igesture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\misc\mmtt_sharedmem.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\misc\NosuchDebug.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\misc\ptwinmm.c">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\misc\NosuchException.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\misc\main.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sensel\morph.cpp">
+      <Filter>Source Files\sensel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -117,6 +141,24 @@
     </ClInclude>
     <ClInclude Include="..\igesture\Igesture.h">
       <Filter>Header Files\igesture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\misc\mmtt_sharedmem.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\misc\NosuchDebug.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\misc\porttime.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\misc\NosuchException.h">
+      <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tuio\TuioDevice.h">
+      <Filter>Header Files\TUIO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sensel\morph.h">
+      <Filter>Header Files\sensel</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

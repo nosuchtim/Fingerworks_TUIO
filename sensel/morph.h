@@ -19,8 +19,8 @@
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef INCLUDED_Igesture_H
-#define INCLUDED_Igesture_H
+#ifndef INCLUDED_Morph_H
+#define INCLUDED_Morph_H
 
 #include "TuioServer.h"
 #include "TuioCursor.h"
@@ -33,11 +33,11 @@ using namespace TUIO;
 #define MAX_IGESTURE_FORCE 5.0
 #define MAX_IGESTURE_ID 12
 
-class Igesture : public TuioDevice { 
+class Morph : public TuioDevice { 
 	
 public:
-	Igesture(TuioServer* server, int i, int m);
-	~Igesture() {
+	Morph(const char *host, int port, int v, int a, int i, int m, bool flipx, bool flipy);
+	~Morph() {
 	};
 	
 	void run();
@@ -52,7 +52,7 @@ public:
 private:
 
 	static void _mycallback(int devnum, int fingnum, int event, float x, float y, float prox);
-	static Igesture* _me;
+	static Morph* _me;
 
 	int verbose, running;
 	int wasupdated;
@@ -64,4 +64,4 @@ private:
 	int s_id;
 };
 
-#endif /* INCLUDED_Igesture_H */
+#endif /* INCLUDED_Morph_H */
