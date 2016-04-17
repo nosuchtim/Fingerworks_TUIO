@@ -32,6 +32,7 @@ using namespace TUIO;
 
 #define MAX_IGESTURE_FORCE 5.0
 #define MAX_IGESTURE_ID 12
+#define DEVICE_MULTIPLIER 1000
 
 class Igesture : public TuioDevice { 
 	
@@ -47,7 +48,7 @@ public:
 	void tc_released(float x, float y, int uid, int id, float force);
 	void tc_dragged(float x, float y, int uid, int id, float force);
 
-	int uid_for_id[MAX_IGESTURE_ID*12];   // 5 devices, 12 fingers per device
+	int uid_for_id[MAX_IGESTURE_ID*12*DEVICE_MULTIPLIER];   // 5 devices, 12 fingers per device
 
 private:
 
