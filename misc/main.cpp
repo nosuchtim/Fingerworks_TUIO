@@ -31,13 +31,22 @@ using namespace TUIO;
 
 TuioDevice *device;
 
-extern "C" { FILE _iob[3] = {__iob_func()[0], __iob_func()[1], __iob_func()[2]}; }
+extern "C" {
+
+// void _snprintf() {
+// }
 
 
-int main(int argc, char* argv[])
+FILE _iob[3];
+
+// extern "C" { FILE _iob[3] = {__iob_func()[0], __iob_func()[1], __iob_func()[2]}; }
+
+}
+
+
+int main(int argc, const char* argv[])
 {
-	
-	char *host;
+	const char *host;
 	int port;
 	int verbose = 0;
 	int c;
@@ -47,7 +56,7 @@ int main(int argc, char* argv[])
 	bool flipx = false;
 	bool flipy = false;
 
-	while ((c = getopt(argc, argv, _T("vxyV:a:i:m:"))) != EOF) {
+	while ((c = getopt(argc, argv, "vxyV:a:i:m:")) != EOF) {
 		switch (c) {
 			case _T('v'):
 				verbose = 1;

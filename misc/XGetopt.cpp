@@ -26,7 +26,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // if you are not using precompiled headers then include these lines:
 #include <windows.h>
-#include <stdio.h>
+// #include <stdio.h>
 #include <tchar.h>
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -43,9 +43,9 @@
 //       getopt -- parse command line options
 //
 //  SYNOPSIS
-//       int getopt(int argc, TCHAR *argv[], TCHAR *optstring)
+//       int getopt(int argc, char *argv[], char *optstring)
 //
-//       extern TCHAR *optarg;
+//       extern char *optarg;
 //       extern int optind;
 //
 //  DESCRIPTION
@@ -98,7 +98,7 @@
 //           encountered, instead of -1 as the latest standard requires.
 //
 //  EXAMPLE
-//       BOOL CMyApp::ProcessCommandLine(int argc, TCHAR *argv[])
+//       BOOL CMyApp::ProcessCommandLine(int argc, char *argv[])
 //       {
 //           int c;
 //
@@ -146,23 +146,27 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-TCHAR	*optarg;		// global argument pointer
+const char	*optarg;		// global argument pointer
 int		optind = 0; 	// global argv index
 
-int getopt(int argc, TCHAR *argv[], TCHAR *optstring)
+#ifndef EOF
+#define EOF    (-1)
+#endif
+
+int getopt(int argc, const char *argv[], const char *optstring)
 {
-	static TCHAR *next = NULL;
+	static const char *next = NULL;
 	if (optind == 0)
 		next = NULL;
 
 	optarg = NULL;
 
-	if (next == NULL || *next == _T('\0'))
+	if (next == NULL || *next == '\0')
 	{
 		if (optind == 0)
 			optind++;
 
-		if (optind >= argc || argv[optind][0] != _T('-') || argv[optind][1] == _T('\0'))
+		if (optind >= argc || argv[optind][0] != '-' || argv[optind][1] == '\0')
 		{
 			optarg = NULL;
 			if (optind < argc)
@@ -170,7 +174,7 @@ int getopt(int argc, TCHAR *argv[], TCHAR *optstring)
 			return EOF;
 		}
 
-		if (_tcscmp(argv[optind], _T("--")) == 0)
+		if (strcmp(argv[optind], "--") == 0)
 		{
 			optind++;
 			optarg = NULL;
@@ -184,16 +188,16 @@ int getopt(int argc, TCHAR *argv[], TCHAR *optstring)
 		optind++;
 	}
 
-	TCHAR c = *next++;
-	TCHAR *cp = _tcschr(optstring, c);
+	char c = *next++;
+	const char *cp = strchr(optstring, c);
 
-	if (cp == NULL || c == _T(':'))
-		return _T('?');
+	if (cp == NULL || c == ':')
+		return '?';
 
 	cp++;
-	if (*cp == _T(':'))
+	if (*cp == ':')
 	{
-		if (*next != _T('\0'))
+		if (*next != '\0')
 		{
 			optarg = next;
 			next = NULL;
@@ -205,7 +209,7 @@ int getopt(int argc, TCHAR *argv[], TCHAR *optstring)
 		}
 		else
 		{
-			return _T('?');
+			return '?';
 		}
 	}
 

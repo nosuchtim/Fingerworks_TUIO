@@ -32,7 +32,7 @@
 #include <winsock2.h>   // this must come first to prevent errors with MSVC7
 #include <windows.h>
 #include <stdlib.h>
-#include <stdio.h>
+// #include <stdio.h>
 
 
 static LONG initCount_ = 0;

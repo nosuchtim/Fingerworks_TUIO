@@ -86,6 +86,9 @@
     <ClCompile Include="..\sensel\morph.cpp">
       <Filter>Source Files\sensel</Filter>
     </ClCompile>
+    <ClCompile Include="..\misc\NosuchUtil.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TUIO\TuioObject.h">
@@ -159,6 +162,9 @@
     </ClInclude>
     <ClInclude Include="..\sensel\morph.h">
       <Filter>Header Files\sensel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\misc\NosuchUtil.h">
+      <Filter>Header Files\misc</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
