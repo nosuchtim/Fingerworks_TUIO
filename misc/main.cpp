@@ -22,14 +22,12 @@
 #include "TuioServer.h"
 #include "TuioCursor.h"
 #include "../igesture/Igesture.h"
-// #include "igesturelib.h"
+#include "mmtt_sharedmem.h"
 #include "TuioDevice.h"
 #include "xgetopt.h"
 #include "tchar.h"
 
 using namespace TUIO;
-
-TuioDevice *device;
 
 extern "C" {
 
@@ -43,11 +41,22 @@ FILE _iob[3];
 
 }
 
+void
+printUsage() {
+	std::cout << "usage: igesture_tuio [-v] [-V #] [-a #] [-h host] [-p port] [-m name]\n";
+	std::cout << "  -V #         Verbosity level\n";
+	std::cout << "  -a #         Number of milliseconds between alive messages\n";
+	std::cout << "  -i #         Initial session id\n";
+	std::cout << "  -h {host}    Hostname for TUIO output\n";
+	std::cout << "  -p #         Port number for TUIO output\n";
+	std::cout << "  -m {name}    Shared memory name\n";
+}
 
 int main(int argc, const char* argv[])
 {
-	const char *host;
-	int port;
+	const char *host = NULL;
+	const char *memname = NULL;
+	int port = -1;
 	int verbose = 0;
 	int c;
 	int alive_update_interval = 1000; // milliseconds
@@ -56,7 +65,7 @@ int main(int argc, const char* argv[])
 	bool flipx = false;
 	bool flipy = false;
 
-	while ((c = getopt(argc, argv, "vxyV:a:i:m:")) != EOF) {
+	while ((c = getopt(argc, argv, "vxyV:a:h:i:m:p:")) != EOF) {
 		switch (c) {
 			case _T('v'):
 				verbose = 1;
@@ -73,51 +82,66 @@ int main(int argc, const char* argv[])
 			case _T('a'):
 				alive_update_interval = atoi(optarg);
 				break;
+			case _T('h'):
+				host = optarg;
+				break;
 			case _T('i'):
 				initial_session_id = atoi(optarg);
 				break;
 			case _T('m'):
-				device_multiplier = atoi(optarg);
+				memname = optarg;
+				break;
+			case _T('p'):
+				port = atoi(optarg);
 				break;
 			case _T('?'):
-				std::cout << "usage: igesture_tuio [-v] [-V #] [-a #] [host] [port]\n";
-				std::cout << "  -V #    Verbosity level\n";
-				std::cout << "  -a #    Number of milliseconds between alive messages\n";
-				std::cout << "  -i #    initial session id\n";
-				std::cout << "  -m #    device session id multiplier\n";
+				printUsage();
         		return 0;
 		}
 	}
 	int nleft = argc - optind;
 	// std::cout << "nleft = " << nleft << " verbose = " << verbose << "\n";
-	if ( nleft == 0 ) {
-		host = "192.168.1.102";
-		host = "127.0.0.1";
-		port = 3333;
-		std::cout << "Assuming host=" << host << " port=" << port << "\n";
-	} else if ( nleft == 2 ) {
-		host = argv[optind++];
-		port = atoi(argv[optind++]);
-	} else {
-		std::cout << "usage: igesture_tuio [-v] [-V #] [host] [port]\n";
+	if ( nleft != 0 ) {
+		printUsage();
 		return 0;
 	}
 
-	TuioServer* tuioServer = new TuioServer(host, port, verbose);
-	tuioServer->flipX(flipx);
-	tuioServer->flipY(flipy);
-	tuioServer->setAliveUpdateInterval(alive_update_interval);
-	//tuioServer->enablePeriodicMessages();
+	if (memname != NULL && host != NULL) {
+		std::cerr << "You can't do both shared-memory and TUIO at the same time!\n";
+		return 1;
+	}
+	if (memname == NULL && host == NULL) {
+		std::cout << "Defaulting to TUIO on host 127.0.0.1\n";
+		host = "127.0.0.1";
+	}
 
-	device = new Igesture(tuioServer,initial_session_id,device_multiplier);
-	if (device->tc_init()) {
+	TuioServer* server = NULL;
+
+	if (host) {
+		if (port < 0) {
+			port = 3333;
+			std::cout << "Assuming port=" << port << "\n";
+		}
+		server = new TuioUdpServer(host, port, alive_update_interval);
+	}
+	else if (memname) {
+		server = new TuioSharedMemServer();
+	}
+
+	server->flipX = flipx;
+	server->flipY = flipy;
+	server->initial_session_id = initial_session_id;
+	server->device_multiplier = device_multiplier;
+	server->verbose = verbose;
+
+	TuioDevice *device;
+	device = new Igesture(server);
+	if (device->init()) {
 		device->run();
 	}
+	// run() may not actually return
 	delete(device);
+	delete(server);
 
 	return 0;
 }
-
-
-
-

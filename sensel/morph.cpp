@@ -27,7 +27,7 @@
 
 using namespace TUIO;
 
-void Morph::tc_pressed(float x, float y, int uid, int id, float force) {
+void Morph::pressed(float x, float y, int uid, int id, float force) {
 	// printf("clicked %f %f   uid=%d id=%d\n",x,y,uid,id);
 
 	uid = uid_for_id[id];
@@ -35,26 +35,26 @@ void Morph::tc_pressed(float x, float y, int uid, int id, float force) {
 		uid = ++s_id;
 		uid_for_id[id] = uid;
 	}
-	TuioCursor *c = tuioServer->addTuioCursorId(x,y,uid,id);
+	TuioCursor *c = server->addTuioCursorId(x,y,uid,id);
 	c->setForce(force / MAX_IGESTURE_FORCE);
 
-	std::list<TuioCursor*> cursorList = tuioServer->getTuioCursors();
+	std::list<TuioCursor*> cursorList = server->getTuioCursors();
 	wasupdated++;
 }
 
-void Morph::tc_dragged(float x, float y, int uid, int id, float force) {
+void Morph::dragged(float x, float y, int uid, int id, float force) {
 	// printf("dragged %f %f   uid=%d id=%d\n",x,y,uid,id);
 	TuioCursor *match = NULL;
 	uid = uid_for_id[id];
 	if ( uid == 0 ) {
-		printf("UNEXPECTED!  uid==0 in tc_dragged!?\n");
+		printf("UNEXPECTED!  uid==0 in dragged!?\n");
 		uid = ++s_id;
 		uid_for_id[id] = uid;
 	}
-	std::list<TuioCursor*> cursorList = tuioServer->getTuioCursors();
+	std::list<TuioCursor*> cursorList = server->getTuioCursors();
 	for (std::list<TuioCursor*>::iterator tuioCursor = cursorList.begin(); tuioCursor!=cursorList.end(); tuioCursor++) {
 		if (((*tuioCursor)->getCursorID()) == (id)) {
-			// printf("tc_dragged found match of cursor id=%d !!\n",id);
+			// printf("dragged found match of cursor id=%d !!\n",id);
 			match = (*tuioCursor);
 			break;
 		}
@@ -63,52 +63,42 @@ void Morph::tc_dragged(float x, float y, int uid, int id, float force) {
 		printf("Hey, didn't find existing cursor with id=%d !?\n",id);
 	} else {
 		// if (cursor->getTuioTime()==currentTime) return;
-		tuioServer->updateTuioCursor(match,x,y);
+		server->updateTuioCursor(match,x,y);
 		// printf("UPDATING TuioCursor with xy=%f,%f\n",x,y);
 		match->setForce(force/ MAX_IGESTURE_FORCE);
 		wasupdated++;
 	}
 }
 
-void Morph::tc_released(float x, float y, int uid, int id, float force) {
+void Morph::released(float x, float y, int uid, int id, float force) {
 	// printf("released  uid=%d id=%d\n",uid,id);
 	uid_for_id[id] = 0;
-	std::list<TuioCursor*> cursorList = tuioServer->getTuioCursors();
+	std::list<TuioCursor*> cursorList = server->getTuioCursors();
 	TuioCursor *match = NULL;
 	for (std::list<TuioCursor*>::iterator tuioCursor = cursorList.begin(); tuioCursor!=cursorList.end(); tuioCursor++) {
 		if (((*tuioCursor)->getCursorID()) == (id)) {
-			// printf("tc_released found cursor id=%d !!\n",id);
+			// printf("released found cursor id=%d !!\n",id);
 			match = (*tuioCursor);
 			break;
 		}
 	}
 	if (match!=NULL) {
-		tuioServer->removeTuioCursor(match);
+		server->removeTuioCursor(match);
 		wasupdated++;
 	}
-	if ((int)(tuioServer->getTuioCursors()).size() == 0) {
+	if ((int)(server->getTuioCursors()).size() == 0) {
 		// printf("Should be resetting sid?\n");
 		s_id = 0;
 	}
 }
 
-Morph::Morph(const char* host, int port, int v, int a, int i, int m, bool flipx, bool flipy) {
+Morph::Morph(TuioServer* s) : TuioDevice(s) {
 
-	verbose = v;
 	s_id = 0;
 	wasupdated = 0;
-	initial_session_id = i;
-	device_multiplier = m;
 	_me = this;
 
-	// std::cout << "IGESTURE init verbose=" << verbose << std::endl;
 	memset(uid_for_id,0,sizeof(uid_for_id));
-
-	tuioServer = new TuioServer(host, port, verbose);
-	tuioServer->flipX(flipx);
-	tuioServer->flipY(flipy);
-	tuioServer->setAliveUpdateInterval(a);
-	//tuioServer->enablePeriodicMessages();
 }
 
 Morph* Morph::_me = 0;
@@ -140,13 +130,13 @@ void Morph::_mycallback(int devnum, int fingnum, int event, float x, float y, fl
 	// printf("MYCALLBACK!! fing=%d xy=%f,%f\n",fingnum,x,y);
 	switch(event) {
 		case FINGER_DRAG:  // UPDATE
-			_me->tc_dragged(x, y, id, id, prox);
+			_me->dragged(x, y, id, id, prox);
 			break;
 		case FINGER_DOWN:  // START
-			_me->tc_pressed(x, y, id, id, prox);
+			_me->pressed(x, y, id, id, prox);
 			break;
 		case FINGER_UP:  // END
-			_me->tc_released(x, y, id, id, prox);
+			_me->released(x, y, id, id, prox);
 			break;
 	}	
 	// printf("end MYCALLBACK\n");
@@ -154,7 +144,7 @@ void Morph::_mycallback(int devnum, int fingnum, int event, float x, float y, fl
 }
 
 bool
-Morph::tc_init()
+Morph::init()
 {
 #ifdef WAIT_TILL_I_HAVE_A_MORPH
 	static TCHAR szAppName[] = TEXT("Simple Window");
@@ -208,9 +198,11 @@ void Morph::run() {
 		// if ( wasupdated > 0 ) {
 		if ( 1 ) {
 			// printf("run loop WASUPDATED\n");
-			tuioServer->initFrame();
-			// tc_check();
-			tuioServer->commitFrame();
+#if 0
+			server->initFrame();
+			// check();
+			server->commitFrame();
+#endif
 		}
 		// printf("run loop pre sleep\n");
 		Sleep(1);

@@ -91,9 +91,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TUIO\TuioObject.h">
-      <Filter>Header Files\TUIO</Filter>
-    </ClInclude>
     <ClInclude Include="..\oscpack\ip\NetworkingUtils.h">
       <Filter>Header Files\oscpack</Filter>
     </ClInclude>
@@ -157,14 +154,14 @@
     <ClInclude Include="..\misc\NosuchException.h">
       <Filter>Header Files\misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\tuio\TuioDevice.h">
-      <Filter>Header Files\TUIO</Filter>
-    </ClInclude>
     <ClInclude Include="..\sensel\morph.h">
       <Filter>Header Files\sensel</Filter>
     </ClInclude>
     <ClInclude Include="..\misc\NosuchUtil.h">
       <Filter>Header Files\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tuio\TuioDevice.h">
+      <Filter>Header Files\TUIO</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

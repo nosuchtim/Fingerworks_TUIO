@@ -5,6 +5,8 @@
 #ifndef __MMTT_SharedMem__
 #define __MMTT_SharedMem__
 
+using namespace TUIO;
+
 #ifdef WIN32
 #include <windows.h>
 typedef HANDLE shmId;
@@ -311,4 +313,10 @@ public:
 
 void print_buff_info(char *prefix, Outlines_SharedMemHeader* h);
 
+class TuioSharedMemServer : public TuioServer {
+public:
+	TuioSharedMemServer() {}
+private:
+	int xx;
+};
 #endif

@@ -28,34 +28,35 @@
 
 using namespace TUIO;
 
-void Igesture::tc_pressed(float x, float y, int uid, int id, float force) {
+void Igesture::pressed(float x, float y, int uid, int id, float force) {
 	// printf("clicked %f %f   uid=%d id=%d\n",x,y,uid,id);
 
 	uid = uid_for_id[id];
 	if ( uid == 0 ) {
 		uid = ++s_id;
+		printf("s_id incremented to %d\n",s_id);
 		uid_for_id[id] = uid;
 	}
-	TuioCursor *c = tuioServer->addTuioCursorId(x,y,uid,id);
+	TuioCursor *c = server->addTuioCursorId(x,y,uid,id);
 	c->setForce(force / MAX_IGESTURE_FORCE);
 
-	std::list<TuioCursor*> cursorList = tuioServer->getTuioCursors();
+	std::list<TuioCursor*> cursorList = server->getTuioCursors();
 	wasupdated++;
 }
 
-void Igesture::tc_dragged(float x, float y, int uid, int id, float force) {
+void Igesture::dragged(float x, float y, int uid, int id, float force) {
 	// printf("dragged %f %f   uid=%d id=%d\n",x,y,uid,id);
 	TuioCursor *match = NULL;
 	uid = uid_for_id[id];
 	if ( uid == 0 ) {
-		printf("UNEXPECTED!  uid==0 in tc_dragged!?\n");
+		printf("UNEXPECTED!  uid==0 in dragged!?\n");
 		uid = ++s_id;
 		uid_for_id[id] = uid;
 	}
-	std::list<TuioCursor*> cursorList = tuioServer->getTuioCursors();
+	std::list<TuioCursor*> cursorList = server->getTuioCursors();
 	for (std::list<TuioCursor*>::iterator tuioCursor = cursorList.begin(); tuioCursor!=cursorList.end(); tuioCursor++) {
 		if (((*tuioCursor)->getCursorID()) == (id)) {
-			// printf("tc_dragged found match of cursor id=%d !!\n",id);
+			// printf("dragged found match of cursor id=%d !!\n",id);
 			match = (*tuioCursor);
 			break;
 		}
@@ -64,43 +65,39 @@ void Igesture::tc_dragged(float x, float y, int uid, int id, float force) {
 		printf("Hey, didn't find existing cursor with id=%d !?\n",id);
 	} else {
 		// if (cursor->getTuioTime()==currentTime) return;
-		tuioServer->updateTuioCursor(match,x,y);
+		server->updateTuioCursor(match,x,y);
 		// printf("UPDATING TuioCursor with xy=%f,%f\n",x,y);
 		match->setForce(force/ MAX_IGESTURE_FORCE);
 		wasupdated++;
 	}
 }
 
-void Igesture::tc_released(float x, float y, int uid, int id, float force) {
+void Igesture::released(float x, float y, int uid, int id, float force) {
 	// printf("released  uid=%d id=%d\n",uid,id);
 	uid_for_id[id] = 0;
-	std::list<TuioCursor*> cursorList = tuioServer->getTuioCursors();
+	std::list<TuioCursor*> cursorList = server->getTuioCursors();
 	TuioCursor *match = NULL;
 	for (std::list<TuioCursor*>::iterator tuioCursor = cursorList.begin(); tuioCursor!=cursorList.end(); tuioCursor++) {
 		if (((*tuioCursor)->getCursorID()) == (id)) {
-			// printf("tc_released found cursor id=%d !!\n",id);
+			// printf("released found cursor id=%d !!\n",id);
 			match = (*tuioCursor);
 			break;
 		}
 	}
 	if (match!=NULL) {
-		tuioServer->removeTuioCursor(match);
+		server->removeTuioCursor(match);
 		wasupdated++;
 	}
-	if ((int)(tuioServer->getTuioCursors()).size() == 0) {
+	if ((int)(server->getTuioCursors()).size() == 0) {
 		// printf("Should be resetting sid?\n");
 		s_id = 0;
 	}
 }
 
-Igesture::Igesture(TuioServer* server, int i, int m) {
+Igesture::Igesture(TuioServer* server) : TuioDevice(server) {
 
 	s_id = 0;
 	wasupdated = 0;
-
-	tuioServer = server;
-	initial_session_id = i;
-	device_multiplier = m;
 
 	_me = this;
 
@@ -121,13 +118,13 @@ void Igesture::_mycallback(int devnum, int fingnum, int event, float x, float y,
 		for (int i = 0; i < GESTURE_MAX_DEVICES; i++) {
 			devnum_initial_session_id[i] = -1;
 		}
-		next_initial_session_id = _me->initial_session_id;
+		next_initial_session_id = _me->server->initial_session_id;
 		initialized = true;
 	}
 
 	if (devnum_initial_session_id[devnum] < 0) {
 		devnum_initial_session_id[devnum] = next_initial_session_id;
-		next_initial_session_id += _me->device_multiplier;
+		next_initial_session_id += _me->server->device_multiplier;
 	}
 
 	y = 1.0 - y;
@@ -135,20 +132,20 @@ void Igesture::_mycallback(int devnum, int fingnum, int event, float x, float y,
 	// printf("MYCALLBACK!! fing=%d xy=%f,%f\n",fingnum,x,y);
 	switch(event) {
 		case FINGER_DRAG:  // UPDATE
-			_me->tc_dragged(x, y, id, id, prox);
+			_me->dragged(x, y, id, id, prox);
 			break;
 		case FINGER_DOWN:  // START
-			_me->tc_pressed(x, y, id, id, prox);
+			_me->pressed(x, y, id, id, prox);
 			break;
 		case FINGER_UP:  // END
-			_me->tc_released(x, y, id, id, prox);
+			_me->released(x, y, id, id, prox);
 			break;
 	}	
 	// printf("end MYCALLBACK\n");
 }
 
 bool
-Igesture::tc_init()
+Igesture::init()
 {
 	static TCHAR szAppName[] = TEXT("Simple Window");
 	HWND hwnd;
@@ -194,17 +191,10 @@ void Igesture::run() {
 	running=true;
 	while (running) {
 		wasupdated = 0;
-		// printf("run loop top\n");
 		gesture_processframes();
-		// if ( wasupdated > 0 ) {
 		if ( 1 ) {
-			// printf("run loop WASUPDATED\n");
-			tuioServer->initFrame();
-			// tc_check();
-			tuioServer->commitFrame();
+			server->update();
 		}
-		// printf("run loop pre sleep\n");
 		Sleep(1);
-		// printf("run loop post sleep\n");
 	} 
 }

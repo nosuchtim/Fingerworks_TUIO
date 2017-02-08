@@ -74,28 +74,12 @@ namespace TUIO {
 	 * @author Martin Kaltenbrunner
 	 * @version 1.4
 	 */ 
+
 	class TuioServer { 
 		
 	public:
 
-		/**
-		 * This constructor creates a TuioServer that sends to the provided port on the the given host
-		 * using a default packet size of 1492 bytes to deliver unfragmented UDP packets on a LAN
-		 *
-		 * @param  host  the receiving host name
-		 * @param  port  the outgoing TUIO UDP port number
-		 */
-		TuioServer(const char *host, int port, int v);
-
-		/**
-		 * This constructor creates a TuioServer that sends to the provided port on the the given host
-		 * the packet UDP size can be set to a value between 576 and 65536 bytes
-		 *
-		 * @param  host  the receiving host name
-		 * @param  port  the outgoing TUIO UDP port number
-		 * @param  size  the maximum UDP packet size
-		 */
-		TuioServer(const char *host, int port, int size, int v);
+		TuioServer();
 
 		/**
 		 * The destructor is doing nothing in particular. 
@@ -151,73 +135,11 @@ namespace TUIO {
 		void removeExternalTuioCursor(TuioCursor *tcur);
 		
 		/**
-		 * Initializes a new frame with the given TuioTime
-		 *
-		 * @param	ttime	the frame time
-		 */
-		void initFrame();
-		
-		/**
-		 * Commits the current frame.
-		 * Generates and sends TUIO messages of all currently active and updated TuioObjects and TuioCursors.
-		 */
-		void commitFrame();
-
-		/**
 		 * Returns the next available Session ID for external use.
 		 * @return	the next available Session ID for external use
 		 */
 		long getSessionID();
 
-		/**
-		 * Returns the current frame ID for external use.
-		 * @return	the current frame ID for external use
-		 */
-		long getFrameID();
-		
-		/**
-		 * Returns the current frame ID for external use.
-		 * @return	the current frame ID for external use
-		 */
-		TuioTime getFrameTime();
-
-		/**
-		 * Generates and sends TUIO messages of all currently active TuioObjects and TuioCursors.
-		 */
-		void sendFullMessages();		
-
-		/**
-		 * Disables the periodic full update of all currently active TuioObjects and TuioCursors 
-		 *
-		 * @param	interval	update interval in seconds, defaults to one second
-		 */
-		void enablePeriodicMessages(int interval=1);
-
-		/**
-		 * Disables the periodic full update of all currently active and inactive TuioObjects and TuioCursors 
-		 */
-		void disablePeriodicMessages();
-
-		/**
-		 * Returns true if the periodic full update of all currently active TuioObjects and TuioCursors is enabled.
-		 * @return	true if the periodic full update of all currently active TuioObjects and TuioCursors is enabled
-		 */
-		bool periodicMessagesEnabled() {
-			return periodic_update;
-		}
-	
-		/**
-		 * Returns the periodic update interval in seconds.
-		 * @return	the periodic update interval in seconds
-		 */
-		int getUpdateInterval() {
-			return update_interval;
-		}
-
-		void setAliveUpdateInterval(int milli) {
-			alive_update_interval = milli;
-		}
-		
 		/**
 		 * Returns a List of all currently active TuioCursors
 		 *
@@ -247,50 +169,91 @@ namespace TUIO {
 		 */
 		bool isConnected() { return connected; }
 
+#if 0
 		bool flipX() { return flipx; }
 		bool flipY() { return flipy; }
 		bool flipX(bool b) { flipx = b; return flipx; }
 		bool flipY(bool b) { flipy = b; return flipy;}
+#endif
+
+		int verbose;
+		int initial_session_id;
+		int device_multiplier;
+		bool flipX;
+		bool flipY;
 		
-	private:
+		virtual void update() { }
+
+	protected:
 		std::list<TuioCursor*> cursorList;
-		
+		long sessionID;
 		int maxCursorID;
+		bool updateCursor;
+		long lastCursorUpdate;
+		bool connected;
+
+	private:
 		std::list<TuioCursor*> freeCursorList;
 		std::list<TuioCursor*> freeCursorBuffer;
 		
+	};
+
+	class TuioUdpServer : public TuioServer {
+	public:
+		TuioUdpServer(const char *host, int port, int alive_interval);
+		~TuioUdpServer();
+
+		void setAliveUpdateInterval(int milli) {
+			alive_update_interval = milli;
+		}
+		void initialize(const char *host, int port);
+		void sendFullMessages();
+		void enablePeriodicMessages(int interval = 1);
+		void disablePeriodicMessages();
+		bool periodicMessagesEnabled() {
+			return periodic_update;
+		}
+		int getUpdateInterval() {
+			return update_interval;
+		}
+		void sendEmptyCursorBundle();
+		void startCursorBundle();
+		void addCursorMessage(TuioCursor *tcur);
+		void sendCursorBundle(long fseq);
+
+		void update() {
+			initFrame();
+			// check?
+			commitFrame();
+		}
+
+	private:
+
+		void initFrame();
+		void commitFrame();
+
+		long getFrameID();
+		TuioTime getFrameTime();
+
+		int alive_update_interval;
+		bool periodic_update;
+		int update_interval;
+
 		UdpTransmitSocket *socket;	
 		osc::OutboundPacketStream  *oscPacket;
 		char *oscBuffer; 
 		osc::OutboundPacketStream  *fullPacket;
 		char *fullBuffer; 
-		
-		void initialize(const char *host, int port, int size);
-
-		void sendEmptyCursorBundle();
-		void startCursorBundle();
-		void addCursorMessage(TuioCursor *tcur);
-		void sendCursorBundle(long fseq);
-		
-		int update_interval;
-		int alive_update_interval;
-		bool periodic_update;
-
 		long currentFrame;
-		bool updateCursor;
-		long lastCursorUpdate;
-
-		long sessionID;
-		int verbose;
-		bool flipx;
-		bool flipy;
 
 #ifndef WIN32
 		pthread_t thread;
 #else
 		HANDLE thread;
 #endif	
-		bool connected;
+		
 	};
+
 };
+
 #endif /* INCLUDED_TuioServer_H */

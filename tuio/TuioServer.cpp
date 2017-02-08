@@ -30,19 +30,19 @@ static void* ThreadFunc( void* obj )
 static DWORD WINAPI ThreadFunc( LPVOID obj )
 #endif
 {
-	TuioServer *tuioServer = static_cast<TuioServer*>(obj);
-	while ((tuioServer->isConnected()) && (tuioServer->periodicMessagesEnabled())) {
-		tuioServer->sendFullMessages();
+	TuioUdpServer *server = static_cast<TuioUdpServer*>(obj);
+	while ((server->isConnected()) && (server->periodicMessagesEnabled())) {
+		server->sendFullMessages();
 #ifndef WIN32
 		usleep(USEC_SECOND*tuioServer->getUpdateInterval());
 #else
-		Sleep(MSEC_SECOND*tuioServer->getUpdateInterval());
+		Sleep(MSEC_SECOND*server->getUpdateInterval());
 #endif
 	}	
 	return 0;
 };
 
-void TuioServer::enablePeriodicMessages(int interval) {
+void TuioUdpServer::enablePeriodicMessages(int interval) {
 	if (periodic_update) return;
 	
 	update_interval = interval;
@@ -56,7 +56,7 @@ void TuioServer::enablePeriodicMessages(int interval) {
 #endif
 }
 
-void TuioServer::disablePeriodicMessages() {
+void TuioUdpServer::disablePeriodicMessages() {
 	if (!periodic_update) return;
 	periodic_update = false;
 	
@@ -66,7 +66,7 @@ void TuioServer::disablePeriodicMessages() {
 	thread = NULL;	
 }
 
-void TuioServer::sendFullMessages() {
+void TuioUdpServer::sendFullMessages() {
 	
 	// prepare the cursor packet
 	fullPacket->Clear();
@@ -125,11 +125,11 @@ void TuioServer::sendFullMessages() {
 
 		float x = (*tuioCursor)->getX();
 		float y = (*tuioCursor)->getY();
-		if (flipX()) {
+		if (flipX) {
 			x = 1.0f - x;
 		}
 		// For some reason that I'm not sure of, the y is already flipped, so this is reversed.
-		if (!flipY()) {
+		if (!flipY) {
 			y = 1.0f - y;
 		}
 
@@ -156,19 +156,30 @@ void TuioServer::sendFullMessages() {
 	
 }
 
+#if 0
 TuioServer::TuioServer(const char *host, int port, int v) {
 	verbose = v;
 	// std::cout << "TUIOSERVER init verbose= " << verbose << std::endl;
 	initialize(host,port,IP_MTU_SIZE);
 }
+#endif
 
-TuioServer::TuioServer(const char *host, int port, int size, int v) {
-	verbose = v;
-	// std::cout << "TUIOSERVER init2 verbose= " << verbose << std::endl;
-	initialize(host,port,size);
+TuioUdpServer::TuioUdpServer(const char *host, int port, int alive_interval) {
+	alive_update_interval = alive_interval;
+	initialize(host,port);
 }
 
-void TuioServer::initialize(const char *host, int port, int size) {
+TuioServer::TuioServer() {
+	verbose = 0;
+	initial_session_id = 10000;
+	device_multiplier = 1000;
+}
+
+TuioServer::~TuioServer() {
+}
+
+void TuioUdpServer::initialize(const char *host, int port) {
+	int size = IP_MTU_SIZE;
 	if (size>MAX_UDP_SIZE) size = MAX_UDP_SIZE;
 	else if (size<MIN_UDP_SIZE) size = MIN_UDP_SIZE;
 
@@ -193,11 +204,9 @@ void TuioServer::initialize(const char *host, int port, int size) {
 
 	periodic_update = false;
 	connected = true;
-	flipx = false;
-	flipy = false;
 }
 
-TuioServer::~TuioServer() {
+TuioUdpServer::~TuioUdpServer() {
 	connected = false;
 
 	sendEmptyCursorBundle();
@@ -349,15 +358,15 @@ long TuioServer::getSessionID() {
 	return sessionID;
 }
 
-long TuioServer::getFrameID() {
+long TuioUdpServer::getFrameID() {
 	return currentFrame;
 }
 
-void TuioServer::initFrame() {
+void TuioUdpServer::initFrame() {
 	currentFrame++;
 }
 
-void TuioServer::commitFrame() {
+void TuioUdpServer::commitFrame() {
 	
 	if(updateCursor) {
 		startCursorBundle();
@@ -385,7 +394,7 @@ void TuioServer::commitFrame() {
 	updateCursor = false;
 }
 
-void TuioServer::sendEmptyCursorBundle() {
+void TuioUdpServer::sendEmptyCursorBundle() {
 	oscPacket->Clear();	
 	(*oscPacket) << osc::BeginBundleImmediate;
 	(*oscPacket) << osc::BeginMessage( "/tuio/25Dcur") << "alive" << osc::EndMessage;	
@@ -400,7 +409,7 @@ void TuioServer::sendEmptyCursorBundle() {
 	}
 }
 
-void TuioServer::startCursorBundle() {	
+void TuioUdpServer::startCursorBundle() {	
 	oscPacket->Clear();	
 	(*oscPacket) << osc::BeginBundleImmediate;
 	
@@ -420,16 +429,16 @@ void TuioServer::startCursorBundle() {
 	}
 }
 
-void TuioServer::addCursorMessage(TuioCursor *tcur) {
+void TuioUdpServer::addCursorMessage(TuioCursor *tcur) {
 
 	(*oscPacket) << osc::BeginMessage( "/tuio/25Dcur") << "set";
 	float x = tcur->getX();
 	float y = tcur->getY();
-	if (flipX()) {
+	if (flipX) {
 		x = 1.0 - x;
 	}
 	// For some reason that I'm not sure of, the y is already flipped, so this is reversed.
-	if (!flipY()) {
+	if (!flipY) {
 		y = 1.0 - y;
 	}
 	 (*oscPacket) << (int32)(tcur->getSessionOrCursorID()) << x << y << tcur->getForce();
@@ -443,7 +452,7 @@ void TuioServer::addCursorMessage(TuioCursor *tcur) {
 	}
 }
 
-void TuioServer::sendCursorBundle(long fseq) {
+void TuioUdpServer::sendCursorBundle(long fseq) {
 	(*oscPacket) << osc::BeginMessage( "/tuio/25Dcur") << "fseq" << (int32)fseq << osc::EndMessage;
 	(*oscPacket) << osc::EndBundle;
 	socket->Send( oscPacket->Data(), oscPacket->Size() );

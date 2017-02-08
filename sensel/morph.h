@@ -36,16 +36,16 @@ using namespace TUIO;
 class Morph : public TuioDevice { 
 	
 public:
-	Morph(const char *host, int port, int v, int a, int i, int m, bool flipx, bool flipy);
+	Morph(TuioServer* s);
 	~Morph() {
 	};
 	
 	void run();
-	bool tc_init();
-	int tc_check() { return 0; };
-	void tc_pressed(float x, float y, int uid, int id, float force);
-	void tc_released(float x, float y, int uid, int id, float force);
-	void tc_dragged(float x, float y, int uid, int id, float force);
+	bool init();
+	int check() { return 0; };
+	void pressed(float x, float y, int uid, int id, float force);
+	void released(float x, float y, int uid, int id, float force);
+	void dragged(float x, float y, int uid, int id, float force);
 
 	int uid_for_id[MAX_IGESTURE_ID*12];   // 5 devices, 12 fingers per device
 

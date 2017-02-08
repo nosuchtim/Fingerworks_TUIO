@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "NosuchUtil.h"
+#include "TuioServer.h"
 #include "MMTT_SharedMem.h"
 
 bool

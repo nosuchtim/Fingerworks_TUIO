@@ -22,13 +22,13 @@
 #ifndef INCLUDED_Igesture_H
 #define INCLUDED_Igesture_H
 
+using namespace TUIO;
+
 #include "TuioServer.h"
 #include "TuioCursor.h"
 #include <list>
 #include <math.h>
 #include "TuioDevice.h"
-
-using namespace TUIO;
 
 #define MAX_IGESTURE_FORCE 5.0
 #define MAX_IGESTURE_ID 12
@@ -37,18 +37,18 @@ using namespace TUIO;
 class Igesture : public TuioDevice { 
 	
 public:
-	Igesture(TuioServer* server, int i, int m);
+	Igesture(TuioServer* server);
 	~Igesture() {
 	};
 	
 	void run();
-	bool tc_init();
-	int tc_check() { return 0; };
-	void tc_pressed(float x, float y, int uid, int id, float force);
-	void tc_released(float x, float y, int uid, int id, float force);
-	void tc_dragged(float x, float y, int uid, int id, float force);
+	bool init();
+	int check() { return 0; };
+	void pressed(float x, float y, int uid, int id, float force);
+	void released(float x, float y, int uid, int id, float force);
+	void dragged(float x, float y, int uid, int id, float force);
 
-	int uid_for_id[MAX_IGESTURE_ID*12*DEVICE_MULTIPLIER];   // 5 devices, 12 fingers per device
+	int uid_for_id[MAX_IGESTURE_ID*12*DEVICE_MULTIPLIER];   // 12 fingers per device
 
 private:
 
