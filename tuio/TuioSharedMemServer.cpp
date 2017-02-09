@@ -43,6 +43,7 @@ void TuioSharedMemServer::update() {
 		printf("TuioSharedMemServer::update ncursors=%d\n", ncursors);
 		last_ncursors = ncursors;
 	}
+	shmem_lock_and_update_outlines();
 }
 
 void
@@ -128,8 +129,19 @@ TuioSharedMemServer::shmem_update_outlines(Outlines_SharedMemHeader* h)
 	buff_index buff = h->buff_being_constructed;
 	h->clear_lists(buff);
 
+	// int ncursors = (int)(getTuioCursors()).size();
+	for (std::list<TuioCursor*>::iterator iter = cursorList.begin(); iter != cursorList.end(); iter++) {
+		TuioCursor* c = *iter;
+		int rid = 1;
+		float area = 0.5;
+		int npoints = 0;
+		int sid = initial_session_id + c->getSessionID();
+		h->addOutline(buff, rid, sid, c->getX(), c->getY(), c->getForce(), area, npoints);
+	}
+
 #if 0
 	for (int i = 0; i<numblobs; i++) {
+		shmem_lock_and_update_outlines();
 
 		MmttRegion* r = blob_region[i];
 		int sid = blob_sid[i];
