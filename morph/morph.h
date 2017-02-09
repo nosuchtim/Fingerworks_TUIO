@@ -27,6 +27,7 @@
 #include <list>
 #include <math.h>
 #include "TuioDevice.h"
+#include "sensel.h"
 
 using namespace TUIO;
 

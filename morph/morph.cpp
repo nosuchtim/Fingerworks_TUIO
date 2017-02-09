@@ -146,6 +146,13 @@ void Morph::_mycallback(int devnum, int fingnum, int event, float x, float y, fl
 bool
 Morph::init()
 {
+	bool sensel_sensor_opened = false;
+
+	sensel_sensor_opened = senselOpenConnection(0);
+	if ( !sensel_sensor_opened ) {
+		return false;
+	}
+
 #ifdef WAIT_TILL_I_HAVE_A_MORPH
 	static TCHAR szAppName[] = TEXT("Simple Window");
 	HWND hwnd;
@@ -193,19 +200,10 @@ void Morph::run() {
 	running=true;
 	while (running) {
 		wasupdated = 0;
-		// printf("run loop top\n");
-		// morph_processframes();   // EVENTUALLY
-		// if ( wasupdated > 0 ) {
+		// Call something here if it's a polling interface
 		if ( 1 ) {
-			// printf("run loop WASUPDATED\n");
-#if 0
-			server->initFrame();
-			// check();
-			server->commitFrame();
-#endif
+			server->update();
 		}
-		// printf("run loop pre sleep\n");
 		Sleep(1);
-		// printf("run loop post sleep\n");
 	} 
 }

@@ -23,8 +23,6 @@
 #include "TuioCursor.h"
 #include "Igesture.h"
 #include "igesturelib.h"
-#include "xgetopt.h"
-#include "tchar.h"
 
 using namespace TUIO;
 

@@ -19,15 +19,15 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#include "NosuchUtil.h"
 #include "TuioServer.h"
 #include "TuioSharedMemServer.h"
 #include "TuioUdpServer.h"
 #include "TuioCursor.h"
-#include "Igesture.h"
 #include "TuioDevice.h"
+#include "Igesture.h"
 #include "xgetopt.h"
 #include "tchar.h"
-#include "NosuchUtil.h"
 
 using namespace TUIO;
 
@@ -136,8 +136,7 @@ int main(int argc, const char* argv[])
 	server->device_multiplier = device_multiplier;
 	server->verbose = verbose;
 
-	TuioDevice *device;
-	device = new Igesture(server);
+	TuioDevice *device = new Igesture(server);
 	if (device->init()) {
 		device->run();
 	}
