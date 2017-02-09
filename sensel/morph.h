@@ -58,9 +58,6 @@ private:
 	int wasupdated;
 	
 	int width, height;
-	int screen_width, screen_height;
-	int window_width, window_height;
-	TuioTime currentTime;
 	int s_id;
 };
 

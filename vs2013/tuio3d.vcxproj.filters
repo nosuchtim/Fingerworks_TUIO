@@ -89,6 +89,12 @@
     <ClCompile Include="..\misc\NosuchUtil.cpp">
       <Filter>Source Files\misc</Filter>
     </ClCompile>
+    <ClCompile Include="..\tuio\TuioSharedMemServer.cpp">
+      <Filter>Source Files\TUIO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tuio\TuioUdpServer.cpp">
+      <Filter>Source Files\TUIO</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\oscpack\ip\NetworkingUtils.h">
@@ -161,6 +167,12 @@
       <Filter>Header Files\misc</Filter>
     </ClInclude>
     <ClInclude Include="..\tuio\TuioDevice.h">
+      <Filter>Header Files\TUIO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tuio\TuioSharedMemServer.h">
+      <Filter>Header Files\TUIO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tuio\TuioUdpServer.h">
       <Filter>Header Files\TUIO</Filter>
     </ClInclude>
   </ItemGroup>

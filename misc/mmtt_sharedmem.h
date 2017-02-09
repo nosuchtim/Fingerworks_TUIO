@@ -2,8 +2,8 @@
 * Some of this code is derived from sample code in Touch Designer, for
 * sharing textures in shared memory.
 */
-#ifndef __MMTT_SharedMem__
-#define __MMTT_SharedMem__
+
+#pragma once
 
 using namespace TUIO;
 
@@ -312,11 +312,3 @@ public:
 };
 
 void print_buff_info(char *prefix, Outlines_SharedMemHeader* h);
-
-class TuioSharedMemServer : public TuioServer {
-public:
-	TuioSharedMemServer() {}
-private:
-	int xx;
-};
-#endif

@@ -20,12 +20,14 @@
 */
 
 #include "TuioServer.h"
+#include "TuioSharedMemServer.h"
+#include "TuioUdpServer.h"
 #include "TuioCursor.h"
-#include "../igesture/Igesture.h"
-#include "mmtt_sharedmem.h"
+#include "Igesture.h"
 #include "TuioDevice.h"
 #include "xgetopt.h"
 #include "tchar.h"
+#include "NosuchUtil.h"
 
 using namespace TUIO;
 
@@ -107,7 +109,7 @@ int main(int argc, const char* argv[])
 	}
 
 	if (memname != NULL && host != NULL) {
-		std::cerr << "You can't do both shared-memory and TUIO at the same time!\n";
+		NosuchDebug("You can't do both shared-memory and TUIO at the same time!\n");
 		return 1;
 	}
 	if (memname == NULL && host == NULL) {
@@ -125,7 +127,7 @@ int main(int argc, const char* argv[])
 		server = new TuioUdpServer(host, port, alive_update_interval);
 	}
 	else if (memname) {
-		server = new TuioSharedMemServer();
+		server = new TuioSharedMemServer(memname);
 	}
 
 	server->flipX = flipx;

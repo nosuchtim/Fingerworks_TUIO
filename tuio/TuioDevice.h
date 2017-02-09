@@ -1,5 +1,4 @@
-#ifndef TUIODEVICE_H
-#define TUIODEVICE_H
+#pragma once
 
 #include <list>
 
@@ -25,5 +24,3 @@ namespace TUIO {
 		TuioServer *server;
 	};
 };
-
-#endif

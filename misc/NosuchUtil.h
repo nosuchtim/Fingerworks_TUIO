@@ -27,8 +27,7 @@
 	WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef NOSUCHUTIL_H
-#define NOSUCHUTIL_H
+#pragma once
 
 #include <stdint.h>
 // #include <pthread.h>
@@ -351,7 +350,5 @@ public:
 	int				tracked;
 	NSSprite *next;
 };
-
-#endif
 
 #endif

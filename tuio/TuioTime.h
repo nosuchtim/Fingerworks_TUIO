@@ -19,8 +19,7 @@
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef INCLUDED_TUIOTIME_H
-#define INCLUDED_TUIOTIME_H
+#pragma once
 
 #ifndef WIN32
 #include <pthread.h>
@@ -101,4 +100,3 @@ namespace TUIO {
 		static TuioTime getSystemTime();
 	};
 };
-#endif /* INCLUDED_TUIOTIME_H */

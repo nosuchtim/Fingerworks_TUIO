@@ -1,5 +1,5 @@
 /*
- TUIO C++ Library - part of the reacTIVision project
+ TUIO Server Component - part of the reacTIVision project
  http://reactivision.sourceforge.net/
  
  Copyright (c) 2005-2009 Martin Kaltenbrunner <mkalten@iua.upf.edu>
@@ -19,21 +19,24 @@
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "TuioTime.h"
-using namespace TUIO;
-	
-long TuioTime::start_milliseconds = 0;
+#pragma once
 
-void TuioTime::initSession() {
-	TuioTime startTime = TuioTime::getSystemTime();
-	start_milliseconds = startTime.getMilliSeconds();
-}
+#include "mmtt_sharedmem.h"
 
-TuioTime TuioTime::getStartTime() {
-	return TuioTime(start_milliseconds);
-}
+namespace TUIO {
 
-TuioTime TuioTime::getSystemTime() {
-	TuioTime systemTime(timeGetTime());
-	return systemTime;
-}
+	class TuioSharedMemServer : public TuioServer {
+	public:
+		TuioSharedMemServer(const char* memname);
+		void update();
+		void shmem_lock_and_update_outlines();
+
+	private:
+
+		void shmem_update_outlines(Outlines_SharedMemHeader* h);
+
+		MMTT_SharedMem* setup_shmem_for_outlines(const char* memname);
+		MMTT_SharedMem* _sharedmem_outlines;
+	};
+
+};

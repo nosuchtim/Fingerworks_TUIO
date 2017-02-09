@@ -34,7 +34,6 @@ void Igesture::pressed(float x, float y, int uid, int id, float force) {
 	uid = uid_for_id[id];
 	if ( uid == 0 ) {
 		uid = ++s_id;
-		printf("s_id incremented to %d\n",s_id);
 		uid_for_id[id] = uid;
 	}
 	TuioCursor *c = server->addTuioCursorId(x,y,uid,id);

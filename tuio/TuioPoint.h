@@ -19,8 +19,8 @@
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef INCLUDED_TUIOPOINT_H
-#define INCLUDED_TUIOPOINT_H
+#pragma once
+
 #include "TuioTime.h"
 #include <iostream>
 
@@ -49,12 +49,6 @@ namespace TUIO {
 		 * X coordinate, representated as a floating point value in a range of 0..1  
 		 */
 		float ypos;
-#if 0
-		/**
-		 * The time stamp of the last update represented as TuioTime (time since session start)
-		 */
-		TuioTime currentTime;
-#endif
 		/**
 		 * The creation time of this TuioPoint represented as TuioTime (time since session start)
 		 */
@@ -229,4 +223,3 @@ namespace TUIO {
 		};
 	};
 };
-#endif

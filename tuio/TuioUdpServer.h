@@ -36,8 +36,6 @@
 #include "ip/NetworkingUtils.h"
 #include "ip/UdpSocket.h"
 
-class MMTT_SharedMem;
-
 #include "TuioCursor.h"
 
 #define IP_MTU_SIZE 1500
@@ -48,42 +46,59 @@ class MMTT_SharedMem;
 
 namespace TUIO {
 
-	class TuioServer { 
-		
+	class TuioUdpServer : public TuioServer {
 	public:
+		TuioUdpServer(const char *host, int port, int alive_interval);
+		~TuioUdpServer();
 
-		TuioServer();
-		~TuioServer();
-		
-		TuioCursor* addTuioCursor(float xp, float yp);
-		TuioCursor* TuioServer::addTuioCursorId(float x, float y, int uid, int id);
-		void updateTuioCursor(TuioCursor *tcur, float xp, float yp);
-		void removeTuioCursor(TuioCursor *tcur);
-		long getSessionID();
-		std::list<TuioCursor*> getTuioCursors();
-		
-		TuioCursor* getClosestTuioCursor(float xp, float yp);
-		bool isConnected() { return connected; }
+		void setAliveUpdateInterval(int milli) {
+			alive_update_interval = milli;
+		}
+		void initialize(const char *host, int port);
+		void sendFullMessages();
+		void enablePeriodicMessages(int interval = 1);
+		void disablePeriodicMessages();
+		bool periodicMessagesEnabled() {
+			return periodic_update;
+		}
+		int getUpdateInterval() {
+			return update_interval;
+		}
+		void sendEmptyCursorBundle();
+		void startCursorBundle();
+		void addCursorMessage(TuioCursor *tcur);
+		void sendCursorBundle(long fseq);
 
-		int verbose;
-		int initial_session_id;
-		int device_multiplier;
-		bool flipX;
-		bool flipY;
-		
-		virtual void update() { }
-
-	protected:
-		std::list<TuioCursor*> cursorList;
-		long sessionID;
-		int maxCursorID;
-		bool updateCursor;
-		long lastCursorUpdate;
-		bool connected;
+		void update() {
+			initFrame();
+			// check?
+			commitFrame();
+		}
 
 	private:
-		std::list<TuioCursor*> freeCursorList;
-		std::list<TuioCursor*> freeCursorBuffer;
+
+		void initFrame();
+		void commitFrame();
+
+		long getFrameID();
+		TuioTime getFrameTime();
+
+		int alive_update_interval;
+		bool periodic_update;
+		int update_interval;
+
+		UdpTransmitSocket *socket;	
+		osc::OutboundPacketStream  *oscPacket;
+		char *oscBuffer; 
+		osc::OutboundPacketStream  *fullPacket;
+		char *fullBuffer; 
+		long currentFrame;
+
+#ifndef WIN32
+		pthread_t thread;
+#else
+		HANDLE thread;
+#endif	
 		
 	};
 };

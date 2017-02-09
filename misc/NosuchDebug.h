@@ -25,8 +25,7 @@
 	WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef NOSUCHDEBUG_H
-#define NOSUCHDEBUG_H
+#pragma once
 
 #include <string>
 
@@ -81,5 +80,3 @@ std::string NosuchForwardSlash(std::string filepath);
 
 typedef void (*ErrorPopupFuncType)(const char* msg); 
 extern ErrorPopupFuncType NosuchErrorPopup;
-
-#endif

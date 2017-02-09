@@ -19,8 +19,7 @@
  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef INCLUDED_TUIOLISTENER_H
-#define INCLUDED_TUIOLISTENER_H
+#pragma once
 
 #include "TuioCursor.h"
 
@@ -80,4 +79,3 @@ namespace TUIO {
 		virtual void refresh(TuioTime ftime)=0;
 	};
 };
-#endif /* INCLUDED_TUIOLISTENER_H */

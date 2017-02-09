@@ -4,8 +4,7 @@
  *
  */
 
-#ifndef NOSUCH_EXCEPTION_H
-#define NOSUCH_EXCEPTION_H
+#pragma once
 
 #include <exception>
 #include <string>
@@ -31,9 +30,5 @@ void SEH_To_Cplusplus ( unsigned int u, EXCEPTION_POINTERS *exp );
 #else
 
 #define CATCH_NULL_POINTERS
-
-#endif
-
-
 
 #endif

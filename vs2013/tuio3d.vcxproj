@@ -60,7 +60,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level2</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>C:\local\FingerWorks\sdk\FWHID_HandTracking\include;..\TUIO;..\oscpack;..\misc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\local\FingerWorks\sdk\FWHID_HandTracking\include;..\TUIO;..\oscpack;..\misc;..\igesture;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>fwtrack.lib;glut32.lib;opengl32.lib;glu32.lib;ws2_32.lib;winmm.lib;msvcrtd.lib;libcpmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -113,7 +113,9 @@
     <ClCompile Include="..\oscpack\osc\OscTypes.cpp" />
     <ClCompile Include="..\sensel\morph.cpp" />
     <ClCompile Include="..\tuio\TuioServer.cpp" />
+    <ClCompile Include="..\tuio\TuioSharedMemServer.cpp" />
     <ClCompile Include="..\tuio\TuioTime.cpp" />
+    <ClCompile Include="..\tuio\TuioUdpServer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\igesture\Igesture.h" />
@@ -139,7 +141,9 @@
     <ClInclude Include="..\tuio\TuioListener.h" />
     <ClInclude Include="..\tuio\TuioPoint.h" />
     <ClInclude Include="..\tuio\TuioServer.h" />
+    <ClInclude Include="..\tuio\TuioSharedMemServer.h" />
     <ClInclude Include="..\tuio\TuioTime.h" />
+    <ClInclude Include="..\tuio\TuioUdpServer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
