@@ -1,9 +1,14 @@
 #include "NosuchUtil.h"
+#include "NosuchException.h"
 #include "TuioServer.h"
 #include "TuioSharedMemServer.h"
 
 TuioSharedMemServer::TuioSharedMemServer(const char* memname) {
 	_sharedmem_outlines = setup_shmem_for_outlines(memname);
+	if (_sharedmem_outlines == NULL) {
+		NosuchErrorOutput("Unable to create shared memory!?");
+		exit(1);
+	}
 }
 
 MMTT_SharedMem*
@@ -19,8 +24,9 @@ TuioSharedMemServer::setup_shmem_for_outlines(const char* memname) {
 
 	MMTT_SharedMemError shmerr = mem->getErrorState();
 	if (shmerr != MMTT_SHM_ERR_NONE) {
-		NosuchDebug("Error when creating SharedMem?? err=%d", shmerr);
-		return NULL;
+		NosuchErrorOutput("Error when creating SharedMem?? err=%d", shmerr);
+		throw NosuchException("Error when creating SharedMem?? err=%d", shmerr);
+		// return NULL;
 	}
 
 	mem->lock();
@@ -135,7 +141,8 @@ TuioSharedMemServer::shmem_update_outlines(Outlines_SharedMemHeader* h)
 		int rid = 1;
 		float area = 0.5;
 		int npoints = 0;
-		int sid = initial_session_id + c->getSessionID();
+		// int sid = initial_session_id + c->getSessionOrCursorID();
+		int sid = c->getSessionOrCursorID();
 		h->addOutline(buff, rid, sid, c->getX(), c->getY(), c->getForce(), area, npoints);
 	}
 

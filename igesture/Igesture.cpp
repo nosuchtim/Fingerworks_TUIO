@@ -35,6 +35,7 @@ void Igesture::pressed(float x, float y, int uid, int id, float force) {
 		uid_for_id[id] = uid;
 	}
 	TuioCursor *c = server->addTuioCursorId(x,y,uid,id);
+	printf("Igesture::pressed added cursor uid=%d id=%d\n", uid, id);
 	c->setForce(force / MAX_IGESTURE_FORCE);
 
 	std::list<TuioCursor*> cursorList = server->getTuioCursors();
