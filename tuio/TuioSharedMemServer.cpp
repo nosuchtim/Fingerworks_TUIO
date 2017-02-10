@@ -46,7 +46,6 @@ void TuioSharedMemServer::update() {
 	static int last_ncursors = -1;
 	int ncursors = (int)(getTuioCursors()).size();
 	if (ncursors != last_ncursors) {
-		printf("TuioSharedMemServer::update ncursors=%d\n", ncursors);
 		last_ncursors = ncursors;
 	}
 	shmem_lock_and_update_outlines();

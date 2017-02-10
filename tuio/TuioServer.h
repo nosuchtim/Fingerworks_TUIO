@@ -56,11 +56,13 @@ namespace TUIO {
 		~TuioServer();
 		
 		TuioCursor* addTuioCursor(float xp, float yp);
-		TuioCursor* TuioServer::addTuioCursorId(float x, float y, int uid, int id);
+		TuioCursor* addTuioCursorId(float x, float y, int uid, int id);
 		void updateTuioCursor(TuioCursor *tcur, float xp, float yp);
 		void removeTuioCursor(TuioCursor *tcur);
 		long getSessionID();
 		std::list<TuioCursor*> getTuioCursors();
+
+		void adjustXY(float& x, float& y);
 		
 		TuioCursor* getClosestTuioCursor(float xp, float yp);
 		bool isConnected() { return connected; }

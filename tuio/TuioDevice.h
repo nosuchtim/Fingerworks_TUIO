@@ -9,7 +9,6 @@ namespace TUIO {
 	public:
 		TuioDevice(TuioServer* s) : server(s) {
 		};
-		// TuioDevice(const char *host, int port, int v, int a, int i, int m, bool flipx, bool flipy);
 		~TuioDevice() {
 		};
 
