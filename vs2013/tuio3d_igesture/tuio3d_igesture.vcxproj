@@ -79,9 +79,10 @@
       <AdditionalIncludeDirectories>C:\local\FingerWorks\sdk\FWHID_HandTracking\include;.\TUIO;.\sdl\include;.\oscpack;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;ENDIANESS=OSC_HOST_LITTLE_ENDIAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <PrecompiledHeader />
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level2</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <PrecompiledHeaderFile />
     </ClCompile>
     <Link>
       <AdditionalDependencies>glut32.lib;opengl32.lib;glu32.lib;sdl.lib;sdlmain.lib;ws2_32.lib;winmm.lib;msvcrt.lib;libcpmt.lib;fwtrack.lib;%(AdditionalDependencies)</AdditionalDependencies>
